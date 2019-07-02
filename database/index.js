@@ -44,6 +44,10 @@ const saveQuiz = (quiz) => {
   return Quiz.findOneAndUpdate({_id: quiz.id}, quiz, {upsert: true, new: true});
 };
 
+/***********
+ * EXPORTS *
+ ***********/
+
 module.exports.saveQuiz = saveQuiz;
 module.exports.getQuiz = getQuiz;
 module.exports.getMarker = getMarker;

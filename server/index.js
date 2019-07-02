@@ -23,7 +23,7 @@ app.post('/api/locations', (req, res) => {
 
 //retrieve a saved quiz from the database
 app.get('/api/quizzes', (req, res) => {
-  db.getQuiz(req.body.quiz)
+  db.getQuiz(req.body.id)
   .then(results => res.send(results))
   .catch(err => console.log(err))
 })
