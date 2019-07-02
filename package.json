@@ -4,7 +4,10 @@
   "description": "mapquiz is a study tool for memorizing geographic locations.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js",
+    "start-dev": "nodemon server/index.js",
+    "react-dev": "webpack -d --watch"
   },
   "repository": {
     "type": "git",
@@ -29,6 +32,7 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
+    "nodemon": "^1.19.1",
     "webpack": "^4.35.2",
     "webpack-cli": "^3.3.5"
   }
