@@ -48,7 +48,9 @@ const saveQuiz = (quiz) => {
  * EXPORTS *
  ***********/
 
-module.exports.saveQuiz = saveQuiz;
-module.exports.getQuiz = getQuiz;
-module.exports.getMarker = getMarker;
-module.exports.saveMarker = saveMarker;
+module.exports = {
+  saveQuiz,
+  getQuiz,
+  getMarker,
+  saveMarker
+};
