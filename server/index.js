@@ -2,9 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const db = require(__dirname + '/../database/index.js');
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.static( __dirname + '/../client/dist/'));
+app.use('/legacy', express.static(__dirname + '/../legacy/'))
 app.use(express.json());
 
 //retrieve a marker from the database
@@ -35,4 +36,4 @@ app.post('/api/quizzes', (req, res) => {
   .catch(err => console.log(err))
 })
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
