@@ -4,7 +4,7 @@ const Map = () => {
   return (
     <div id="mapframe">
       <div id="mapoverlay">
-        <div id="status" className="w3-animate-zoom"></div>
+        <div id="load_progress" className="w3-animate-zoom"></div>
         <div id="instructions" className="w3-animate-zoom">
           <div id="instructions_title">Instructions</div>
           <div id="instructionslist">
