@@ -18,12 +18,14 @@ class App extends React.Component{
 
   render() {
     return (
-     <div id="wrapper">
-       <Overlay/>
-       <Sidebar/>
-       <Map/>
-       <Status/>
-     </div>
+      <div id="wrapper">
+        {/* <Status /> */}
+        <div id="main">
+          <Overlay />
+          <Sidebar />
+          <Map />
+        </div>
+      </div>
     )
   }
 
