@@ -15,11 +15,11 @@ const Sidebar = () => {
       <div id="sidebar_contents" style={{display: "block"}}>
         <textarea name="comment" id="address" rows="8" placeholder="Enter one location per line"></textarea>
 
-        <div id="control_buttons" style={{textAlign: "center", display: "block"}}>
-          <button className="button" id="createnewquiz" disabled>Create Quiz</button>
-          <button className="button" id="savequiz" disabled >Save</button>
+        <div id="control_buttons">
+          <button className="button" id="createnewquiz">Create Quiz</button><br></br>
+          <button className="button" id="savequiz">Save</button>
           <button className="button" onClick={() => { closePopup('instructions', 'mapoverlay'); openPopup('load', 'overlay')} }
-            id="load_tab_button" disabled>Load</button>
+            id="load_tab_button">Load</button>
         </div>
 
       </div>
