@@ -28,8 +28,8 @@ const Quiz = mongoose.model('Quiz', quizSchema);
  * QUERIES *
  ***********/
 
-const getMarker = (id) => {
-  return Marker.find({id: id});
+const getMarker = (name) => {
+  return Marker.find({name: name});
 };
 
 const saveMarker = (marker) => {
