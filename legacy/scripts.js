@@ -4,7 +4,7 @@ for the original 2018 project.
 Proceed with caution!
 ************************* */
 
-var global = {
+var global2 = {
   firstLoad: true,
   googleMarkers: [],
   markerPositions: {},
@@ -15,73 +15,73 @@ var global = {
   correctSound: new Audio("correct.mp3"),
 }
 
-function initMap() {
-  var styledMapType = new google.maps.StyledMapType(
-    [
-      { "elementType": "labels", "stylers": [{ "visibility": "off" }] },
-      { "featureType": "administrative.neighborhood", "stylers": [{ "visibility": "off" }] },
-      { "featureType": "road", "stylers": [{ "visibility": "off" }] },
-    ]);
+// function initMap() {
+//   var styledMapType = new google.maps.StyledMapType(
+//     [
+//       { "elementType": "labels", "stylers": [{ "visibility": "off" }] },
+//       { "featureType": "administrative.neighborhood", "stylers": [{ "visibility": "off" }] },
+//       { "featureType": "road", "stylers": [{ "visibility": "off" }] },
+//     ]);
 
-  var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 1,
-    minZoom: 2.4,
-    center: { lat: 34.397, lng: 10.644 },
-    mapTypeControlOptions: { mapTypeIds: ['styled_map'] },
-    disableDefaultUI: true,
-    disableDoubleClickZoom: true,
-    backgroundColor: 'hsla(0, 0%, 0%, 0)',
-  });
+//   var map = new google.maps.Map(document.getElementById('map'), {
+//     zoom: 1,
+//     minZoom: 2.4,
+//     center: { lat: 34.397, lng: 10.644 },
+//     mapTypeControlOptions: { mapTypeIds: ['styled_map'] },
+//     disableDefaultUI: true,
+//     disableDoubleClickZoom: true,
+//     backgroundColor: 'hsla(0, 0%, 0%, 0)',
+//   });
 
-  map.mapTypes.set('styled_map', styledMapType);
-  map.setMapTypeId('styled_map');
+//   map.mapTypes.set('styled_map', styledMapType);
+//   map.setMapTypeId('styled_map');
 
-  var geocoder = new google.maps.Geocoder();
-  var service = new google.maps.places.PlacesService(map);
+//   var geocoder = new google.maps.Geocoder();
+//   var service = new google.maps.places.PlacesService(map);
 
-  document.getElementById('createnewquiz').addEventListener('click', function () {
-    if(document.getElementById('address').value.trim() === ""){
-      alert("Please enter at least two locations before creating a quiz.")
-    } else {
-      global.googleMarkers = document.getElementById('address').value.split("\n").map(elem=>elem.trim()).filter(elem => elem.length != 0);
-      global.markerPositions = {};
-      global.saved = false;
-      global.loaded = false;
-      generateQuiz(geocoder, map, service);
-    }
-  });
+//   document.getElementById('createnewquiz').addEventListener('click', function () {
+//     if(document.getElementById('address').value.trim() === ""){
+//       alert("Please enter at least two locations before creating a quiz.")
+//     } else {
+//       global2.googleMarkers = document.getElementById('address').value.split("\n").map(elem=>elem.trim()).filter(elem => elem.length != 0);
+//       global2.markerPositions = {};
+//       global2.saved = false;
+//       global2.loaded = false;
+//       generateQuiz(geocoder, map, service);
+//     }
+//   });
 
-  document.getElementById('quiz_to_load').addEventListener('keydown', function(event){
-    if(event.keyCode === 13){
-      loadQuiz();
-      closePopup('load', 'overlay');
-      setTimeout(function(){ generateQuiz(geocoder, map, service) }, 100);
-    }
-  })
+//   document.getElementById('quiz_to_load').addEventListener('keydown', function(event){
+//     if(event.keyCode === 13){
+//       loadQuiz();
+//       closePopup('load', 'overlay');
+//       setTimeout(function(){ generateQuiz(geocoder, map, service) }, 100);
+//     }
+//   })
 
-  document.addEventListener('keydown', function(event){
-    if(event.keyCode === 221){
-      event.preventDefault();
-      closePopup('instructions', 'mapoverlay');
-      openPopup('load', 'overlay');
-    }
-  })
+//   document.addEventListener('keydown', function(event){
+//     if(event.keyCode === 221){
+//       event.preventDefault();
+//       closePopup('instructions', 'mapoverlay');
+//       openPopup('load', 'overlay');
+//     }
+//   })
 
-  document.getElementById('savequiz').addEventListener('click', function () {
-    if (Object.keys(global.markerPositions).length === 0) {
-      alert("Please create or load a map!")
-    } else if (global.saved === true){  // If quiz has already been saved and not edited, don't generate new ID (only for retrieval of ID)
-      openPopup('save', 'overlay');
-    } else {
-      saveQuiz();
-      openPopup('save', 'overlay');
-    }
-  });
-  /* End of initMap() */
-}
+//   document.getElementById('savequiz').addEventListener('click', function () {
+//     if (Object.keys(global2.markerPositions).length === 0) {
+//       alert("Please create or load a map!")
+//     } else if (global2.saved === true){  // If quiz has already been saved and not edited, don't generate new ID (only for retrieval of ID)
+//       openPopup('save', 'overlay');
+//     } else {
+//       saveQuiz();
+//       openPopup('save', 'overlay');
+//     }
+//   });
+//   /* End of initMap() */
+// }
 
 function generateQuiz(geocoder, resultsMap, service) {
-  global['markerBounds'] = new google.maps.LatLngBounds();
+  global2['markerBounds'] = new google.maps.LatLngBounds();
   clearExistingQuiz();
 
   var quizPool = [];
@@ -90,16 +90,16 @@ function generateQuiz(geocoder, resultsMap, service) {
   var delay = 100;
   var currentQuestion;
 
-  if (global.loaded === true) {
+  if (global2.loaded === true) {
     /* Render markers from savefile */
-    Object.keys(global.markerPositions).forEach(location => {
+    Object.keys(global2.markerPositions).forEach(location => {
       quizPool.push(location);
-      setTimeout(function () { renderMarker(global.markerPositions[location], location) }, delay);
+      setTimeout(function () { renderMarker(global2.markerPositions[location], location) }, delay);
       delay += 50;
     });
   } else {
     /* Create markers from Google Geocoding and/or Places */
-    global.googleMarkers.forEach(location => {
+    global2.googleMarkers.forEach(location => {
       quizPool.push(location);
       makeRequest('db_search.php?q=' + location, function (data) { /* Search database for address name */
         var id = data.responseText;
@@ -161,8 +161,8 @@ function generateQuiz(geocoder, resultsMap, service) {
     if (loadCount === quizPool.length) {
       closePopup('status', 'mapoverlay');
       setTimeout(() => {
-        resultsMap.fitBounds(global.markerBounds);
-        resultsMap.setCenter(global.markerBounds.getCenter());
+        resultsMap.fitBounds(global2.markerBounds);
+        resultsMap.setCenter(global2.markerBounds.getCenter());
       }, 0);
       askQuestion();
     } else {
@@ -170,8 +170,8 @@ function generateQuiz(geocoder, resultsMap, service) {
     }
     document.getElementById('status').innerHTML = "Marking location " + loadCount + " of " + quizPool.length + "...";
     var marker = new google.maps.Marker({ map: resultsMap, position: position });
-    global.markerPositions[locationName] = position;
-    global.markersArray.push(marker);
+    global2.markerPositions[locationName] = position;
+    global2.markersArray.push(marker);
 
     marker.addListener('click', function () {
       checkAnswer(locationName);
@@ -185,11 +185,11 @@ function generateQuiz(geocoder, resultsMap, service) {
     marker.addListener('dragend', function () {
       marker.setIcon();
       marker.setOptions({draggable: false});
-      global.saved = false;
-      global.markerPositions[locationName] = marker.position;
+      global2.saved = false;
+      global2.markerPositions[locationName] = marker.position;
     });
 
-    global.markerBounds.extend(position);
+    global2.markerBounds.extend(position);
     /* End of renderMarker() */
   }
 
@@ -214,14 +214,14 @@ function generateQuiz(geocoder, resultsMap, service) {
   function checkAnswer(address) {
     if (address === currentQuestion) {
       if (count === quizPool.length - 1) {
-        global.correctSound.play();
+        global2.correctSound.play();
         document.getElementById('question').innerHTML = "";
         document.getElementById('answer').innerHTML = '<div id="blink">You win!</div>';
         document.getElementById("answer").style.backgroundImage = "linear-gradient(to top, #0ba360 0%, #3cba92 100%)";
         document.getElementById('playagain').style.display = "inline"; /* Show "play again" button */
       } else {
         count++;
-        global.correctSound.play();
+        global2.correctSound.play();
         document.getElementById('answer').innerHTML = '<div id="blink">Correct!</div>';
         document.getElementById("answer").style.backgroundImage = "linear-gradient(to top, #0ba360 0%, #3cba92 100%)";
         askQuestion();
@@ -247,8 +247,8 @@ function generateQuiz(geocoder, resultsMap, service) {
 }
 
 function clearExistingQuiz() {
-    global.markersArray.forEach(marker => { marker.setMap(null) });
-    global.markersArray.length = 0;
+    global2.markersArray.forEach(marker => { marker.setMap(null) });
+    global2.markersArray.length = 0;
     closePopup('instructions', 'mapoverlay');
     document.getElementById('question').innerHTML = "";
     document.getElementById('answer').innerHTML = "";
@@ -305,37 +305,37 @@ function toggleSidebar(){
 }
 
 function loadQuiz(){
-  global.quizID = document.getElementById('quiz_to_load').value;
-  global.loaded = true;
-  global.saved = true;
+  global2.quizID = document.getElementById('quiz_to_load').value;
+  global2.loaded = true;
+  global2.saved = true;
   document.getElementById('address').value = "";
   document.getElementById('playagain').style.display = "none";
   document.getElementById('answer').innerHTML = "";
   document.getElementById("answer").style.backgroundImage = "linear-gradient(to top, #dfe9f3 0%, white 100%)";
 
-  makeRequest('load_quiz.php?q=' + global.quizID, function (data) {
+  makeRequest('load_quiz.php?q=' + global2.quizID, function (data) {
     if (!data.responseText) {
       alert("That quiz ID is invalid!");
       document.getElementById('quiz_to_load').value = "";
     } else {
-      global.markerPositions = JSON.parse(data.responseText);
-      Object.keys(global.markerPositions).forEach(location => {
+      global2.markerPositions = JSON.parse(data.responseText);
+      Object.keys(global2.markerPositions).forEach(location => {
         document.getElementById('address').value += location + "\n";
       });
     }
   });
-  document.getElementById('custom_quiz_link').innerHTML = global.quizID;
+  document.getElementById('custom_quiz_link').innerHTML = global2.quizID;
 }
 
 function saveQuiz(){
   $.ajax({
           type: "POST",
           url: "save_quiz.php",
-          data: 'markerPositions=' + JSON.stringify(global.markerPositions),
+          data: 'markerPositions=' + JSON.stringify(global2.markerPositions),
           cache: false,
           success: function(data){
-            global.saved = true;
-            global.quizID = data;
+            global2.saved = true;
+            global2.quizID = data;
             document.getElementById('custom_quiz_link').innerHTML = data;
           }
         });
