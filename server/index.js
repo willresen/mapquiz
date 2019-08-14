@@ -22,17 +22,21 @@ app.post('/api/locations', async (req, res) => {
 
   for (location of locations) {
     await redis.getAsync(`location:${location}`)
-      .then(results => markers.push({ source: 'cache', location: location, results: results }))
-      .catch(() => {
-        axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GOOGLE_API_KEY}`)
-          .then(response => {
-            response = response.data.results[0].geometry.location;
-            redis.setex(`location:${location}`, 2592000, JSON.stringify(response));
-            markers.push({ source: 'google', location: location, results: response });
-          })
-          .catch(err => res.status(404))
+      .then(async results => {
+        if (results) {
+          markers.push({ source: 'cache', location: location, results: JSON.parse(results) });
+        } else {
+          await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GOOGLE_API_KEY}`)
+            .then(response => {
+              response = response.data.results[0].geometry.location;
+              redis.setex(`location:${location}`, 2592000, JSON.stringify(response));
+              markers.push({ source: 'google', location: location, results: response });
+            })
+            .catch(err => res.status(404))
+        }
       });
   }
+
   res.send(markers)
 });
 
