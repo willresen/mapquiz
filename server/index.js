@@ -16,7 +16,7 @@ app.get('/api/locations/', (req, res) => {
 })
 
 //add a marker to the database
-app.post('/api/locations', async (req, res) => {
+app.post('/api/locations/', async (req, res) => {
   const locations = req.body.split('\n');
   let markers = [];
 
@@ -24,19 +24,19 @@ app.post('/api/locations', async (req, res) => {
     await redis.getAsync(`location:${location}`)
       .then(async results => {
         if (results) {
-          markers.push({ source: 'cache', location: location, results: JSON.parse(results) });
+          markers.push({ source: 'cache', location: location, position: JSON.parse(results) });
         } else {
+          location = location.replace(/[^a-zA-Z0-9 '-]/g, '');
           await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GOOGLE_API_KEY}`)
             .then(response => {
               response = response.data.results[0].geometry.location;
               redis.setex(`location:${location}`, 2592000, JSON.stringify(response));
-              markers.push({ source: 'google', location: location, results: response });
+              markers.push({ source: 'google', location: location, position: response });
             })
-            .catch(err => res.status(404))
+            .catch(err => console.log('>>>>>>' + err))
         }
       });
   }
-
   res.send(markers)
 });
 
