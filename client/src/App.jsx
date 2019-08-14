@@ -5,46 +5,43 @@ import Overlay from './components/Overlay.jsx';
 import Status from './components/Status.jsx';
 import Sidebar from './components/Sidebar.jsx';
 
-class App extends React.Component{
-  constructor(props){
+class App extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
+      locationInput: '',
       markers: [],
       currentQuestion: null,
       saved: false,
       loaded: false,
-    }
-    this.closePopup = this.closePopup.bind(this);
+    };
     this.fetchMarkers = this.fetchMarkers.bind(this);
-  }
+    this.handleChange = this.handleChange.bind(this);
+  };
 
-  closePopup(popup, overlay) {
-    document.getElementById(popup).classList.remove("w3-animate-zoom");
-    void document.getElementById(popup).offsetWidth;
-    document.getElementById(popup).classList.add("w3-animate-zoomout");
-    setTimeout(function () {
-      document.getElementById(overlay).style.display = "none";
-      document.getElementById(popup).style.display = "none";
-    }, 0)
-  }
-
-  fetchMarkers(locations) {
+  fetchMarkers() {
     fetch('/api/locations/', {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
-      body: locations
+      body: this.state.locationInput
     })
       .then(result => result.json())
       .then(result => this.setState({ markers: result }));
-  }
+  };
+
+  handleChange(e) {
+    this.setState({ locationInput: e.target.value })
+  };
 
   render() {
     return (
       <div id="wrapper">
         <Status />
         <div id="main">
-          <Overlay closePopup={this.closePopup}/>
-          <Sidebar fetchMarkers={this.fetchMarkers}/>
+          <Overlay />
+          <Sidebar fetchMarkers={this.fetchMarkers}
+            handleChange={this.handleChange}
+            locationInput={this.state.locationInput} />
           <MapContainer />
         </div>
       </div>
