@@ -1,17 +1,17 @@
 import React from 'react';
 
-const Overlay = ({ closePopup }) => {
+const Overlay = () => {
   return (
     <div id="overlay">
       {/* Popup window for saving quizzes */}
       <div id="save" className="popup w3-animate-zoom">
-        <div id="close_button" onClick={() => closePopup('save', 'overlay')}>×</div>
+        <div id="close_button">×</div>
         <div id="save_instructions">Copy this ID to save your quiz!</div>
         <textarea readOnly id="custom_quiz_link" onClick={e => e.target.select()}></textarea>
       </div>
       {/* Popup window for loading quizzes */}
       <div id="load" className="popup w3-animate-zoom">
-        <div id="close_button" onClick={() => closePopup('load', 'overlay')} style={{ left: "485px", top: "-10px" }}>×</div>
+        <div id="close_button" style={{ left: "485px", top: "-10px" }}>×</div>
         <textarea
           id="quiz_to_load"
           maxLength="20"
