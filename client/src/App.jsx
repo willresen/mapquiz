@@ -11,12 +11,17 @@ class App extends React.Component {
     this.state = {
       locationInput: '',
       markers: [],
+      quizPool: [],
       currentQuestion: null,
       saved: false,
       loaded: false,
     };
     this.fetchMarkers = this.fetchMarkers.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.renderMarkers = this.renderMarkers.bind(this);
+    this.checkAnswer = this.checkAnswer.bind(this);
+    this.shuffle = this.shuffle.bind(this);
+    this.generateQuiz = this.generateQuiz.bind(this);
   };
 
   fetchMarkers() {
@@ -26,7 +31,39 @@ class App extends React.Component {
       body: this.state.locationInput
     })
       .then(result => result.json())
-      .then(result => this.setState({ markers: result }));
+      .then(result => this.setState({ markers: result }))
+      .then(this.renderMarkers)
+      .then(this.generateQuiz)
+  };
+
+  renderMarkers() {
+    let quizPool = [];
+    this.state.markers.forEach(marker => {
+      const mark = new google.maps.Marker({ map: map, position: marker.position });
+      mark.addListener('click', () => this.checkAnswer(marker.location));
+      quizPool.push(marker.location);
+    });
+    this.setState({quizPool: quizPool});
+  };
+
+  generateQuiz() {
+    this.setState({quizPool: this.shuffle(this.state.quizPool)});
+  };
+
+  shuffle(array) {
+    let current = array.length;
+    let temp, random;
+    while(current) {
+      random = Math.floor(Math.random() * current--);
+      temp = array[random];
+      array[random] = array[current];
+      array[current] = temp;
+    }
+    return array;
+  };
+
+  checkAnswer(location) {
+    console.log(`Clicked location: ${location}. Current Question: ${this.state.currentQuestion}`);
   };
 
   handleChange(e) {
@@ -45,9 +82,9 @@ class App extends React.Component {
           <MapContainer />
         </div>
       </div>
-    )
-  }
+    );
+  };
 
-}
+};
 
 export default App;
