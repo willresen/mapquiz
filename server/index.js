@@ -21,12 +21,12 @@ app.post('/api/locations/', async (req, res) => {
   let markers = [];
 
   for (location of locations) {
+    location = location.replace(/[^a-zA-Z0-9 '-]/g, '').trim();
     await redis.getAsync(`location:${location}`)
       .then(async results => {
         if (results) {
           markers.push({ source: 'cache', location: location, position: JSON.parse(results) });
         } else {
-          location = location.replace(/[^a-zA-Z0-9 '-]/g, '');
           await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=${process.env.GOOGLE_API_KEY}`)
             .then(response => {
               response = response.data.results[0].geometry.location;
