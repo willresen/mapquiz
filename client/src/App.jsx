@@ -12,7 +12,9 @@ class App extends React.Component {
       locationInput: '',
       markers: [],
       quizPool: [],
-      currentQuestion: null,
+      questionIndex: 0,
+      question: 'There are currently no markers placed on the map.',
+      result: '',
       saved: false,
       loaded: false,
     };
@@ -22,6 +24,10 @@ class App extends React.Component {
     this.checkAnswer = this.checkAnswer.bind(this);
     this.shuffle = this.shuffle.bind(this);
     this.generateQuiz = this.generateQuiz.bind(this);
+  };
+
+  handleChange(e) {
+    this.setState({ locationInput: e.target.value })
   };
 
   fetchMarkers() {
@@ -47,7 +53,19 @@ class App extends React.Component {
   };
 
   generateQuiz() {
-    this.setState({quizPool: this.shuffle(this.state.quizPool)});
+    this.setState(prevState => ({quizPool: this.shuffle(prevState.quizPool), questionIndex: 0}), this.askQuestion);
+  };
+
+  askQuestion() {
+    this.setState(prevState => ({question: `Find ${prevState.quizPool[prevState.questionIndex]}`}))
+  };
+
+  checkAnswer(location) {
+    if (location === this.state.quizPool[this.state.questionIndex]) {
+      this.setState(prevState => ({questionIndex: prevState.questionIndex + 1, result: 'Correct!'}), this.askQuestion);
+    } else {
+      this.setState({result: 'Try again!'}, this.askQuestion);
+    }
   };
 
   shuffle(array) {
@@ -62,18 +80,10 @@ class App extends React.Component {
     return array;
   };
 
-  checkAnswer(location) {
-    console.log(`Clicked location: ${location}. Current Question: ${this.state.currentQuestion}`);
-  };
-
-  handleChange(e) {
-    this.setState({ locationInput: e.target.value })
-  };
-
   render() {
     return (
       <div id="wrapper">
-        <Status />
+        <Status question={this.state.question} result={this.state.result}/>
         <div id="main">
           <Overlay />
           <Sidebar fetchMarkers={this.fetchMarkers}
